@@ -72,7 +72,7 @@ HUGGINGFACE_API_KEY="<your huggingface api key>"
 
 ## Running the web app
 
-* Install Docker (with Docker Compose)
+* Install Docker (with Docker Compose, [Compose Desktop](https://docs.docker.com/compose/install/compose-desktop/))
 * Run on the root of the project: `docker-compose up -d`
 * Go to the browser and open `http://localhost:8080`
 
