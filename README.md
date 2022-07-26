@@ -73,13 +73,13 @@ HUGGINGFACE_API_KEY="<your huggingface api key>"
 ## Running the web app
 
 * Install Docker (with Docker Compose, [Compose Desktop](https://docs.docker.com/compose/install/compose-desktop/))
-* Run on the root of the project: `docker-compose up -d`
+* Run on the root of the project (on a terminal/cli): `docker-compose up -d`
 * Go to the browser and open `http://localhost:8080`
 
 ## To update to the latest version
 
 * Do a git pull of the latest code
-* Run `docker compose up -d --build` to rebuild
+* Run (on a terminal/cli) `docker compose up -d --build` to rebuild
 * Go to the browser and open `http://localhost:8080`
 
 ## Bug reports or feature requests
