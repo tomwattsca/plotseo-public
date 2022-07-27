@@ -53,7 +53,9 @@ const Serp = ({
               <div
                 title="Check rankings for this URL"
                 className={`px-2 py-1 mr-2 ${
-                  ranking === cleanUrl ? 'bg-blue-700 text-white' : 'bg-blue-100 text-blue-400'
+                  ranking === cleanUrl
+                    ? 'bg-sky-700 hover:text-sky-50 hover:bg-sky-600 text-white'
+                    : 'bg-sky-100 hover:bg-sky-600 text-sky-400 hover:text-sky-50'
                 } rounded cursor-pointer flex items-center`}
                 onClick={() => {
                   if (cleanUrl) {
