@@ -4,7 +4,7 @@ The open source version of the original keyword tool code by SEO Ruler.
 
 Hacked together by [Pablo Rosales](http://github.com/pablorosales) on my free time.
 
-**Note**: Most of the tools in this project will be implemented as small Streamlit tools at [Streamlit Tools](https://github.com/PabloRosales/streamlit-seo-apps), if you have trouble setting up this project, I recommend that one. Even if it might not be as powerful.
+**Note**: Most of the tools in this project will be implemented as small Streamlit tools at [Streamlit SEO Tools](https://github.com/PabloRosales/streamlit-seo-apps), if you have trouble setting up this project, I recommend that one. Even if it might not be as powerful.
 
 ## Requirements
 
