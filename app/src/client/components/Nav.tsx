@@ -22,7 +22,7 @@ const Nav = ({ current }: Props) => {
             </div>
             <div className="ml-8 space-x-4">
               <a
-                href="/dashboard"
+                href="/"
                 className={`text-base font-medium ${
                   current === 'dashboard' ? 'text-yellow-100' : 'text-sky-200'
                 } hover:text-yellow-100 flex items-center`}
