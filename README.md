@@ -1,14 +1,10 @@
 # Keyword Tool
 
-The open source version of the original keyword tool code by SEO Ruler.
-
-You can support further development on [Patreon](https://www.patreon.com/_pablodev)
-
-Hacked together by [Pablo Rosales](http://github.com/pablorosales) on my free time.
+The first open source keyword tool.
 
 ## Requirements
 
-For all features to work you'll need these APIs:
+For all features to work you'll need these APIs setup on your `.env.dev` file:
 
 * DataForSEO API key (for SERP data)
 * Keywords Everywhere API key (for keyword data)
@@ -36,7 +32,6 @@ Includes features like:
 * Modifiers/Common terms, verbs and modifier ideas
 
 <img alt="Screenshot" src="./screenshot.png" width="800" />
-<img alt="Screenshot" src="./screenshot-2.png" width="800" />
 
 ## Env file (configuration)
 

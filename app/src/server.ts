@@ -57,10 +57,8 @@ const start = async () => {
 
   // VIEWS
   app.get('/discovery/:id', viewDiscovery);
-  app.get('/dashboard', viewSimple('dashboard.html'));
-  app.get('/', viewSimple('homepage.html'));
+  app.get('/', viewSimple('dashboard.html'));
   app.get('/discovery/topic-map/:reportId', viewTopicMap);
-  app.get('/go-to-serp', viewSimple('go-to-serp.html'));
 
   app.use(
     '/api/__t',
