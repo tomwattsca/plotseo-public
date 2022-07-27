@@ -89,7 +89,9 @@ const KeywordItem = ({
               <div className="flex justify-center cursor-pointer font-semibold text-sm">
                 <div
                   onClick={onShowExtra}
-                  className="px-1 bg-sky-100 hover:bg-lime-100 hover:text-lime-800 text-sky-800 rounded select-none flex items-center"
+                  className={`px-1 ${
+                    open ? 'bg-sky-800 text-sky-50 hover:bg-sky-600' : 'bg-sky-100 text-sky-800 hover:bg-lime-700 hover:text-lime-50'
+                  } rounded select-none flex items-center`}
                 >
                   <i className="ri-eye-line" />
                 </div>
