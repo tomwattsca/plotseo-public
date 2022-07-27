@@ -5,7 +5,6 @@ import bodyParser from 'body-parser';
 import compression from 'compression';
 
 import { connectDb } from './shared/db';
-import { setupRedis } from './shared/cache';
 import { dbCreateIndexes } from './db/indexes';
 import * as trpcExpress from '@trpc/server/adapters/express';
 
@@ -25,7 +24,6 @@ const start = async () => {
   console.log(`Starting server setup in ${process.env.NODE_ENV} mode`);
 
   await connectDb();
-  await setupRedis();
   await dbCreateIndexes();
 
   app.set('trust proxy', true);

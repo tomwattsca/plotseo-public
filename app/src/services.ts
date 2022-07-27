@@ -4,7 +4,6 @@ import bodyParser from 'body-parser';
 import compression from 'compression';
 import { QUEUES } from './constants';
 import { connectDb } from './shared/db';
-import { setupRedis } from './shared/cache';
 import { checkPython } from './api/check-python';
 import { serviceDiscoveryStart } from './services/serviceDiscoveryStart';
 import { serviceDiscoverySerps } from './services/serviceDiscoverySerps';
@@ -20,7 +19,6 @@ const port = 8081;
 
 const start = async () => {
   await connectDb();
-  await setupRedis();
 
   app.set('trust proxy', true);
   app.disable('x-powered-by');
