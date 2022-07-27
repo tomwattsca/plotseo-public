@@ -9,13 +9,11 @@ import { dbCreateIndexes } from './db/indexes';
 import * as trpcExpress from '@trpc/server/adapters/express';
 
 import { appRouter } from './shared/appRouter';
-import { search } from './api/free-tools/search';
 import { createContext } from './shared/context';
 import { searchLocations } from './api/locations';
 import { viewSimple } from './controllers/viewSimple';
 import { viewTopicMap } from './controllers/viewTopicMap';
 import { viewDiscovery } from './controllers/viewDiscovery';
-import { getCountries, getDomains, getLanguages, getLocations } from './api/free-tools/complete';
 
 const port = 8080;
 const app = express();
@@ -43,21 +41,12 @@ const start = async () => {
 
   app.use('/public', express.static(path.join(__dirname, 'public')));
 
-  // API OTHERS
-  app.post('/api/location', searchLocations);
-
-  // FREE APIS
-  app.post(`/api/free/search`, search);
-  app.post(`/api/free/domains`, getDomains);
-  app.post(`/api/free/languages`, getLanguages);
-  app.post(`/api/free/locations`, getLocations);
-  app.post(`/api/free/countries`, getCountries);
-
   // VIEWS
   app.get('/discovery/:id', viewDiscovery);
   app.get('/', viewSimple('dashboard.html'));
   app.get('/discovery/topic-map/:reportId', viewTopicMap);
 
+  app.post('/api/location', searchLocations);
   app.use(
     '/api/__t',
     trpcExpress.createExpressMiddleware({
