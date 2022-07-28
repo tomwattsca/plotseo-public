@@ -1,5 +1,4 @@
 import { IDiscovery } from '../../types/IDiscovery';
-import { ISuggestion } from '../../types/ISuggestion';
 import { uniqBy } from 'lodash';
 import { getGoogleSuggest, getGoogleSuggestionsForPhrase } from '../../shared/suggest';
 import { ALPHABET } from '../../shared/text';
@@ -8,8 +7,8 @@ import { sleep } from '../../shared/time';
 export const getSuggestionsForWildcard = async (
   rootSeed: string,
   report: Pick<IDiscovery, 'location' | 'language' | 'searchEngine'>,
-): Promise<ISuggestion[]> => {
-  const suggestions: ISuggestion[] = [];
+): Promise<string[]> => {
+  const suggestions: string[] = [];
 
   if (!rootSeed.includes('*')) {
     return suggestions;
@@ -19,22 +18,14 @@ export const getSuggestionsForWildcard = async (
 
   const mainSuggestions = await getGoogleSuggestionsForPhrase(rootSeed, report.searchEngine, report.language, report.location);
   for (const suggestion of mainSuggestions) {
-    suggestions.push({
-      seed: suggestion,
-      suggestion: suggestion,
-      modifier: { wildcard: '*' },
-    });
+    suggestions.push(suggestion);
   }
 
   if (!rootSeed.endsWith('*') && wildcardCount === 1) {
     const rootSeedB = `${rootSeed} *`;
     const suggestionsB = await getGoogleSuggestionsForPhrase(rootSeedB, report.searchEngine, report.language, report.location);
     for (const suggestion of suggestionsB.filter((sug) => !mainSuggestions.includes(sug))) {
-      suggestions.push({
-        seed: suggestion,
-        suggestion: suggestion,
-        modifier: { wildcard: '*' },
-      });
+      suggestions.push(suggestion);
     }
   }
 
@@ -47,13 +38,7 @@ export const getSuggestionsForWildcard = async (
       const seed = `${mod} ${parts[1]}`.trim();
       const googleSuggestions = await getGoogleSuggest(seed, report.searchEngine, report.language, report.location, mod.length);
       for (const sug of googleSuggestions) {
-        suggestions.push({
-          seed: rootSeed,
-          suggestion: sug,
-          modifier: {
-            wildcard: letter,
-          },
-        });
+        suggestions.push(sug);
       }
     }
   } else if (wildcardCount === 2) {
@@ -66,18 +51,11 @@ export const getSuggestionsForWildcard = async (
         if (sug.includes('*')) {
           continue;
         }
-
-        suggestions.push({
-          seed: rootSeed,
-          suggestion: sug,
-          modifier: {
-            wildcard: letter,
-          },
-        });
+        suggestions.push(sug);
       }
     }
   }
 
-  const filtered = suggestions.filter((suggestion) => suggestion.suggestion !== rootSeed);
+  const filtered = suggestions.filter((suggestion) => suggestion !== rootSeed);
   return uniqBy(filtered, 'suggestion');
 };

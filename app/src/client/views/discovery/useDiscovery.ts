@@ -56,7 +56,6 @@ const useDiscovery = () => {
   });
 
   const doGetItems = trpc.useQuery(['discovery:items', { reportId: window.__id }], {
-    refetchOnWindowFocus: false,
     enabled: doGetBase.data !== undefined && doGetBase.data.id !== undefined,
   });
 

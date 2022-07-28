@@ -6,8 +6,9 @@ import { ICountryType } from './ICountryType';
 export interface IDiscoveryExpandMessage {
   url?: string;
   seed?: string;
+  isNew: boolean;
   reportId: string;
-  taskUuid: string;
+  taskUuid?: string;
   keywords?: string[];
   serpLocation: string;
   location: ICountryType;

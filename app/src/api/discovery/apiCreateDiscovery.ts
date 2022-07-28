@@ -7,18 +7,17 @@ import { dbCreateDiscovery } from '../../db/discovery';
 import { REPORT_TYPE_DISCOVERY } from '../../types/IReportType';
 import { REPORT_STATUS_QUEUED } from '../../types/IReportStatus';
 import { SEARCH_TYPE_CUSTOM } from '../../types/IDiscoverySearchType';
+import { IDiscoveryExpandMessage } from '../../types/IDiscoveryExpandMessage';
 import { inputCreateDiscovery, outputCreateDiscovery } from './input/inputCreateDiscovery';
 import { getCurrentDate, getCurrentDay, getCurrentMonth, getCurrentYear } from '../../shared/ymd';
 
 export const apiCreateDiscovery = async ({
-  ctx,
   input,
 }: {
   ctx: Context;
   input: z.input<typeof inputCreateDiscovery>;
 }): Promise<z.output<typeof outputCreateDiscovery>> => {
   const {
-    url,
     name,
     competitorPatterns,
     easyWinsDefaults,
@@ -66,7 +65,20 @@ export const apiCreateDiscovery = async ({
   }
 
   if (id) {
-    await sendToQueue<IDiscovery & { keywords: string[]; url?: string }>('discovery-start', { ...report, _id: id, keywords, url });
+    await sendToQueue<IDiscoveryExpandMessage>('discovery-start', {
+      isNew: true,
+      url: input.url,
+      seed: input.seed,
+      reportId: id.toString(),
+      keywords: input.keywords,
+      language: report.language,
+      location: report.location,
+      searchType: input.searchType,
+      serpLocation: report.serpLocation,
+      searchEngine: report.searchEngine,
+      easyWinsDefaults: report.easyWinsDefaults,
+      easyWinsPatterns: report.easyWinsPatterns,
+    });
   }
 
   return {

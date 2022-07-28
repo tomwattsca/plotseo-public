@@ -1,15 +1,14 @@
-import { uniq, uniqBy } from 'lodash';
+import { uniq } from 'lodash';
 
 import { sleep } from '../../shared/time';
 import { IDiscovery } from '../../types/IDiscovery';
-import { ISuggestion } from '../../types/ISuggestion';
 import { QUESTIONS } from '../../shared/text';
 import { getGoogleSuggest } from '../../shared/suggest';
 import { getExtraModifiersFromQuestionSuggestion } from './getExtraModifiersFromQuestionSuggestion';
 
 interface ISuggestionResponse {
   extraModifiers: string[];
-  suggestions: ISuggestion[];
+  suggestions: string[];
 }
 
 const POOL_SIZE = 2;
@@ -20,7 +19,7 @@ export const getSuggestionsForQuestion = async (
   questionMod: string,
 ): Promise<ISuggestionResponse> => {
   let extraModifiers: string[] = [];
-  const suggestions: ISuggestion[] = [];
+  const suggestions: string[] = [];
 
   const seed = `${questionMod} ${rootSeed}`;
   const seedA = `${questionMod} ${rootSeed} *`;
@@ -41,13 +40,7 @@ export const getSuggestionsForQuestion = async (
     }
 
     if (sug !== seed) {
-      suggestions.push({
-        seed: rootSeed,
-        suggestion: sug,
-        modifier: {
-          pre: questionMod,
-        },
-      });
+      suggestions.push(sug);
     }
   }
 
@@ -64,7 +57,7 @@ export const getSuggestionsForQuestion = async (
 
 const getFirstSuggestions = async (rootSeed: string, report: Pick<IDiscovery, '_id' | 'location' | 'language' | 'searchEngine'>) => {
   let extraModifiers: string[] = [];
-  let suggestions: ISuggestion[] = [];
+  let suggestions: string[] = [];
 
   let tasks: Promise<ISuggestionResponse>[] = [];
   for (const question of QUESTIONS) {
@@ -107,8 +100,8 @@ const getExtraSuggestions = async (
   rootSeed: string,
   report: Pick<IDiscovery, 'searchEngine' | 'language' | 'location'>,
   question: string,
-): Promise<ISuggestion[]> => {
-  const suggestions: ISuggestion[] = [];
+): Promise<string[]> => {
+  const suggestions: string[] = [];
 
   const mod = `${question} *`;
   const seed = `${mod} ${rootSeed}`;
@@ -116,13 +109,7 @@ const getExtraSuggestions = async (
   const secondSuggestions = await getGoogleSuggest(seed, report.searchEngine, report.language, report.location, seed.length);
   for (const sug of uniq([...firstSuggestions, ...secondSuggestions])) {
     if (sug !== `${question} ${rootSeed}`) {
-      suggestions.push({
-        seed: rootSeed,
-        suggestion: sug,
-        modifier: {
-          wildcard: mod,
-        },
-      });
+      suggestions.push(sug);
     }
   }
 
@@ -134,9 +121,9 @@ const getSecondSuggestions = async (
   report: Pick<IDiscovery, '_id' | 'location' | 'language' | 'searchEngine'>,
   extraModifiers: string[],
 ) => {
-  let suggestions: ISuggestion[] = [];
+  let suggestions: string[] = [];
 
-  let tasks: Promise<ISuggestion[]>[] = [];
+  let tasks: Promise<string[]>[] = [];
   for (const question of extraModifiers) {
     tasks.push(getExtraSuggestions(rootSeed, report, question));
 
@@ -169,31 +156,26 @@ const getSecondSuggestions = async (
 export const getSuggestionsForQuestions = async (
   rootSeed: string,
   report: Pick<IDiscovery, '_id' | 'location' | 'language' | 'searchEngine'>,
-): Promise<ISuggestion[]> => {
-  const startTime = Date.now();
+): Promise<string[]> => {
   const firstSuggestions = await getFirstSuggestions(rootSeed, report);
 
   console.log(`[discovery-suggest]: Getting extra suggestions for ${rootSeed}`);
 
   const extraSuggestions = await getSecondSuggestions(rootSeed, report, firstSuggestions.extraModifiers);
-  const suggestions = uniqBy([...firstSuggestions.suggestions, ...extraSuggestions], 'suggestion');
+  const suggestions = uniq([...firstSuggestions.suggestions, ...extraSuggestions]);
 
   const filteredSuggestions = suggestions.filter((sug) => {
-    const firstWord = sug.suggestion.split(' ')[0];
+    const firstWord = sug.split(' ')[0];
     const includesQuestion = QUESTIONS.includes(firstWord);
-    const isNotSeed = sug.suggestion !== rootSeed;
-    const withoutSeed = sug.suggestion.replace(rootSeed, '').trim().split(' ');
+    const isNotSeed = sug !== rootSeed;
+    const withoutSeed = sug.replace(rootSeed, '').trim().split(' ');
     const hasMoreThanOneModifier = withoutSeed.length > 1;
-    const sugIncludesAllKeywordWords = rootSeed.split(' ').every((word) => sug.suggestion.includes(word));
+    const sugIncludesAllKeywordWords = rootSeed.split(' ').every((word) => sug.includes(word));
     return includesQuestion && isNotSeed && hasMoreThanOneModifier && sugIncludesAllKeywordWords;
   });
 
   console.log(`[discovery-suggest]: Found a total of ${suggestions.length} uniq suggestions for ${rootSeed}`);
   console.log(`[discovery-suggest]: After filtering, found ${filteredSuggestions.length} uniq suggestions for ${rootSeed}`);
-
-  const endTime = Date.now();
-  const minutes = (endTime - startTime) / 1000 / 60;
-  console.log(`[discovery-suggest]: Finished getting suggestions, took ${minutes} minutes`);
 
   return filteredSuggestions;
 };

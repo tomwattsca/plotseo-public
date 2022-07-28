@@ -37,6 +37,7 @@ export const apiExpandDiscovery = async ({
   await dbAddOrUpdateDiscoveryTask(reportId, taskUuid, 'discovery-expand', REPORT_STATUS_QUEUED);
   await sendToQueue<IDiscoveryExpandMessage>('discovery-expand', {
     taskUuid,
+    isNew: false,
     url: input.url,
     seed: input.seed,
     keywords: input.keywords,

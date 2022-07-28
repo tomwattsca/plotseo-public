@@ -6,7 +6,7 @@ import { dbGetDiscovery } from '../../db/discovery';
 import { DEFAULT_EW_PATTERNS } from '../../shared/ewScore';
 import { dbCheckTopicMapExists } from '../../db/topic-map';
 import { IDiscoveryBase } from '../../types/IDiscoveryBase';
-import { inputGetDiscoveryBase, outputGetDiscoveryBase, IDiscoveryBaseOutput } from './input/inputGetDiscoveryBase';
+import { inputGetDiscoveryBase, outputGetDiscoveryBase } from './input/inputGetDiscoveryBase';
 
 const EMPTY_RESPONSE: z.output<typeof outputGetDiscoveryBase> = {
   id: undefined,

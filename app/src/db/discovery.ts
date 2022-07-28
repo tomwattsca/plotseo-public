@@ -27,10 +27,7 @@ export const dbListDiscovery = async (): Promise<IDiscoveryForList[]> => {
   return collection.find<IDiscoveryForList>({}, { projection: { _id: 1, status: 1, name: 1, date: 1 } }).toArray();
 };
 
-export const dbGetDiscovery = async <T>(
-  id: ObjectId,
-  projection?: { [P in keyof Required<T>]: 1 },
-): Promise<T | undefined> => {
+export const dbGetDiscovery = async <T>(id: ObjectId, projection?: { [P in keyof Required<T>]: 1 }): Promise<T | undefined> => {
   if (!db) {
     throw new Error('Database not connected');
   }
@@ -92,12 +89,16 @@ export const dbDeleteDiscovery = async (id: ObjectId): Promise<boolean> => {
 
 export const dbAddOrUpdateDiscoveryTask = async (
   _id: ObjectId,
-  taskUuid: string,
+  taskUuid: string | undefined,
   queueType: IQueueType,
   status: IReportStatus,
 ): Promise<boolean> => {
   if (!db) {
     throw new Error('Database not connected');
+  }
+
+  if (!taskUuid) {
+    throw new Error('Task UUID is required');
   }
 
   const collection = await db.collection(COLLECTION);

@@ -5,10 +5,9 @@ import compression from 'compression';
 import { QUEUES } from './constants';
 import { connectDb } from './shared/db';
 import { checkPython } from './api/check-python';
-import { serviceDiscoveryStart } from './services/serviceDiscoveryStart';
+import { serviceDiscoveryExpand } from './services/serviceDiscoveryExpand';
 import { serviceDiscoverySerps } from './services/serviceDiscoverySerps';
 import { serviceDiscoveryVerbs } from './services/serviceDiscoveryVerbs';
-import { serviceDiscoveryExpand } from './services/serviceDiscoveryExpand';
 import { serviceDiscoveryKeywords } from './services/serviceDiscoveryKeywords';
 import { serviceDiscoveryTopicMap } from './services/serviceDiscoveryTopicMap';
 import { serviceDiscoveryItemAnalysis } from './services/serviceDiscoveryItemAnalysis';
@@ -28,7 +27,7 @@ const start = async () => {
   app.use(bodyParser.urlencoded({ extended: true }));
 
   app.post(QUEUES['discovery-serps'].endpoint, serviceDiscoverySerps);
-  app.post(QUEUES['discovery-start'].endpoint, serviceDiscoveryStart);
+  app.post(QUEUES['discovery-start'].endpoint, serviceDiscoveryExpand);
   app.post(QUEUES['discovery-verbs'].endpoint, serviceDiscoveryVerbs);
   app.post(QUEUES['discovery-expand'].endpoint, serviceDiscoveryExpand);
   app.post(QUEUES['discovery-keywords'].endpoint, serviceDiscoveryKeywords);
