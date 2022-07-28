@@ -162,7 +162,7 @@ const Keywords = ({ items, compare, reportId, isLoading, setCompare, ewPatterns,
             nextLinkClassName="text-sm text-sky-700 pl-1"
             previousLinkClassName="mr-2 text-sm text-sky-700 pr-1"
             className="flex items-center justify-center p-3 select-none"
-            activeLinkClassName="bg-sky-300 hover:text-white hover:bg-sky-900 font-medium"
+            activeLinkClassName="bg-sky-600 text-sky-50 hover:text-white hover:bg-sky-900 font-medium"
             pageLinkClassName="mr-2 px-2 py-0.5 text-sm bg-sky-100 hover:bg-sky-200 text-sky-900 rounded cursor-pointer select-none"
             onPageChange={(event) => {
               setControl((prev) => ({ ...prev, itemOffset: (event.selected * PER_PAGE) % items.length }));
