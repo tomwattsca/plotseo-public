@@ -51,20 +51,22 @@ export const serviceDiscoverySerpsSimilarity = async (req: Req, res: Response) =
   }
 
   let serpSimilarity: Record<string, IDiscoverySerpSimilarity> | undefined;
-  try {
-    const similarities = await callPy<{ similarity: Record<string, IDiscoverySerpSimilarity> }, Record<string, number[]>>(
-      'serp-similarity.py',
-      {
-        data: serpUrls,
-      },
-    );
-    if (similarities) {
-      serpSimilarity = similarities.similarity;
+  if (Object.keys(serpUrls).length > 0) {
+    try {
+      const similarities = await callPy<{ similarity: Record<string, IDiscoverySerpSimilarity> }, Record<string, number[]>>(
+        'serp-similarity.py',
+        {
+          data: serpUrls,
+        },
+      );
+      if (similarities) {
+        serpSimilarity = similarities.similarity;
+      }
+    } catch (err) {
+      console.error(`[discovery-serps-similarity]: Error getting serp similarity for ${data.seed}: ${data.reportId}`);
+      await dbAddOrUpdateDiscoveryTask(reportId, data.taskUuid, 'discovery-serps-similarity', REPORT_STATUS_ERROR);
+      return res.status(500).json({ message: 'Error getting serp similarity' });
     }
-  } catch (err) {
-    console.error(`[discovery-serps-similarity]: Error getting serp similarity for ${data.seed}: ${data.reportId}`);
-    await dbAddOrUpdateDiscoveryTask(reportId, data.taskUuid, 'discovery-serps-similarity', REPORT_STATUS_ERROR);
-    return res.status(500).json({ message: 'Error getting serp similarity' });
   }
 
   if (serpSimilarity) {
@@ -72,8 +74,6 @@ export const serviceDiscoverySerpsSimilarity = async (req: Req, res: Response) =
       `[discovery-serps-similarity]: Updating ${data.reportId}, found ${Object.keys(serpSimilarity).length} with similar keywords`,
     );
     await dbUpdateDiscovery(reportId, { serpSimilarity });
-  } else {
-    console.log(`[discovery-serps-similarity]: No data found for ${data.reportId}`);
   }
 
   if (serpSimilarity) {

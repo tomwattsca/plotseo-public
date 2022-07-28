@@ -18,6 +18,7 @@ import { IDiscoveryExpandMessage } from '../types/IDiscoveryExpandMessage';
 import { dbGetDiscoveryItemsForReport } from '../db/discovery-item';
 import { IDiscoveryItem } from '../types/IDiscoveryItem';
 import { getKeywordsForUrl } from './utils/getKeywordsForUrl';
+import { IDiscoverySerpSimilarityMessage } from '../types/IDiscoverySerpSimilarityMessage';
 
 type Req = Request<Record<string, unknown>, Record<string, unknown>, { message: IDiscoveryExpandMessage }>;
 
@@ -170,6 +171,14 @@ export const serviceDiscoveryExpand = async (req: Req, res: Response) => {
       reportId: data.reportId,
     });
   }
+
+  const taskSerpSimilarityUuid = uuid();
+  await dbAddOrUpdateDiscoveryTask(reportId, taskSerpSimilarityUuid, 'discovery-serps-similarity', REPORT_STATUS_QUEUED);
+  await sendToQueue<IDiscoverySerpSimilarityMessage>('discovery-serps-similarity', {
+    seed,
+    reportId: data.reportId,
+    taskUuid: taskSerpSimilarityUuid,
+  });
 
   const endTime = Date.now();
   const minutes = (endTime - startTime) / 1000 / 60;
