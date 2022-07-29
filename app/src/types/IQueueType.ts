@@ -1,6 +1,5 @@
 export type IQueueType =
   | 'discovery-expand'
-  | 'discovery-start'
   | 'discovery-keywords'
   | 'discovery-serps'
   | 'discovery-serps-similarity'

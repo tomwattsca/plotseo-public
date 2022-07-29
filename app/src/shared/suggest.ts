@@ -68,41 +68,6 @@ export const extractGoogleAutoSuggestKeywords = (data: string): string[] => {
   return keywordsFound;
 };
 
-export const simpleGoogleSuggest = async (domain: string, language: string, country: string, search: string) => {
-  const google: string[] = [];
-
-  try {
-    console.log(`Getting suggestions for ${domain}`, { search, domain });
-
-    const query = search.replace(/\s+/g, '%20');
-    const suggestUrl = `http://suggestqueries.${domain}/complete/search?output=toolbar&gl=${country.toUpperCase()}&hl=${language}&q=${query}`;
-    const response = await axios.get(suggestUrl);
-
-    if (response) {
-      if (response.data) {
-        const xmlData = await xml2js.parseStringPromise(response.data);
-        if (xmlData && xmlData.toplevel && xmlData.toplevel.CompleteSuggestion) {
-          for (const node of xmlData.toplevel.CompleteSuggestion) {
-            if (node && node.suggestion && node.suggestion.length > 0 && node.suggestion[0].$ && node.suggestion[0].$.data) {
-              google.push(node.suggestion[0].$.data);
-            }
-          }
-        }
-      }
-    }
-  } catch (err) {
-    console.error(err);
-  }
-
-  if (google.length === 1 && google[0] === search) {
-    return [];
-  }
-
-  console.log({ keywords: google });
-
-  return google.map((kw) => cleanKeyword(kw));
-};
-
 export const getGoogleSuggest = async (
   search: string,
   domain: IGoogleDomain,

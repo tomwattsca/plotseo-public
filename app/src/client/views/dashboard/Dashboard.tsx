@@ -9,7 +9,7 @@ import { API_URL } from '../../../constants';
 import Button from '../../components/Button';
 import React, { useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import NewDiscoverySection from './modals/NewDiscoverySection';
+import NewDiscoverySection from './NewDiscoverySection';
 import { IDiscoveryForList } from '../../../types/IDiscoveryForList';
 import { REPORT_STATUS_COMPLETED, REPORT_STATUS_ERROR, REPORT_STATUS_PROCESSING, REPORT_STATUS_QUEUED } from '../../../types/IReportStatus';
 

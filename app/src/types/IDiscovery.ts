@@ -1,5 +1,4 @@
 import { ObjectId } from 'mongodb';
-import { IReportType } from './IReportType';
 import { IReportTask } from './IReportTask';
 import { ICountryType } from './ICountryType';
 import { IGoogleDomain } from './IGoogleDomain';
@@ -14,7 +13,6 @@ import type { IDiscoveryClusterOutput } from '../api/discovery/input/inputGetDis
 export interface IDiscovery {
   _id: ObjectId;
   status: IReportStatus;
-  reportType: IReportType;
 
   // Params
   name: string;

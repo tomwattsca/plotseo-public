@@ -4,7 +4,6 @@ import { Context } from '../../shared/context';
 import { sendToQueue } from '../../shared/queue';
 import { IDiscovery } from '../../types/IDiscovery';
 import { dbCreateDiscovery } from '../../db/discovery';
-import { REPORT_TYPE_DISCOVERY } from '../../types/IReportType';
 import { REPORT_STATUS_QUEUED } from '../../types/IReportStatus';
 import { SEARCH_TYPE_CUSTOM } from '../../types/IDiscoverySearchType';
 import { IDiscoveryExpandMessage } from '../../types/IDiscoveryExpandMessage';
@@ -48,7 +47,6 @@ export const apiCreateDiscovery = async ({
     year: getCurrentYear(),
     month: getCurrentMonth(),
     status: REPORT_STATUS_QUEUED,
-    reportType: REPORT_TYPE_DISCOVERY,
   };
 
   let id: ObjectId | undefined;
@@ -65,7 +63,7 @@ export const apiCreateDiscovery = async ({
   }
 
   if (id) {
-    await sendToQueue<IDiscoveryExpandMessage>('discovery-start', {
+    await sendToQueue<IDiscoveryExpandMessage>('discovery-expand', {
       isNew: true,
       url: input.url,
       seed: input.seed,

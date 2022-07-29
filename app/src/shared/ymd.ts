@@ -1,3 +1,5 @@
+// based on https://github.com/PabloRosales/pretty-ymd
+
 const TEN = 10;
 
 export const getMonth = (d: Date): string => {
@@ -22,23 +24,17 @@ export const getHours = (d: Date): string => {
   return hours < TEN ? `0${hours.toString()}` : hours.toString();
 };
 
-export const getCurrentHours = (): string => getHours(new Date());
-
 export const getMinutes = (d: Date): string => {
   const minutes = d.getMinutes();
 
   return minutes < TEN ? `0${minutes.toString()}` : minutes.toString();
 };
 
-export const getCurrentMinutes = (): string => getMinutes(new Date());
-
 export const getSeconds = (d: Date): string => {
   const seconds = d.getSeconds();
 
   return seconds < TEN ? `0${seconds.toString()}` : seconds.toString();
 };
-
-export const getCurrentSeconds = (): string => getSeconds(new Date());
 
 export const getYear = (d: Date): string => d.getFullYear().toString();
 
@@ -53,12 +49,6 @@ export const getDatetime = (d: Date): string => {
   const sec = getSeconds(d);
 
   return `${year}-${mon}-${day} ${hour}:${min}:${sec}`;
-};
-
-export const getCurrentDatetime = (): string => {
-  const d = new Date();
-
-  return getDatetime(d);
 };
 
 export const getDate = (d: Date): string => {
@@ -82,5 +72,3 @@ export const getTime = (d: Date): string => {
 
   return `${hour}:${min}:${sec}`;
 };
-
-export const getCurrentTime = (): string => getTime(new Date());

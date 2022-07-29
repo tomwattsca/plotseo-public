@@ -10,7 +10,6 @@ import { serviceDiscoverySerps } from './services/serviceDiscoverySerps';
 import { serviceDiscoveryVerbs } from './services/serviceDiscoveryVerbs';
 import { serviceDiscoveryKeywords } from './services/serviceDiscoveryKeywords';
 import { serviceDiscoveryTopicMap } from './services/serviceDiscoveryTopicMap';
-import { serviceDiscoveryItemAnalysis } from './services/serviceDiscoveryItemAnalysis';
 import { serviceDiscoverySerpsSimilarity } from './services/serviceDiscoverySerpsSimilarity';
 
 const app = express();
@@ -27,12 +26,10 @@ const start = async () => {
   app.use(bodyParser.urlencoded({ extended: true }));
 
   app.post(QUEUES['discovery-serps'].endpoint, serviceDiscoverySerps);
-  app.post(QUEUES['discovery-start'].endpoint, serviceDiscoveryExpand);
   app.post(QUEUES['discovery-verbs'].endpoint, serviceDiscoveryVerbs);
   app.post(QUEUES['discovery-expand'].endpoint, serviceDiscoveryExpand);
   app.post(QUEUES['discovery-keywords'].endpoint, serviceDiscoveryKeywords);
   app.post(QUEUES['discovery-topic-map'].endpoint, serviceDiscoveryTopicMap);
-  app.post(QUEUES['discovery-item-analysis'].endpoint, serviceDiscoveryItemAnalysis);
   app.post(QUEUES['discovery-serps-similarity'].endpoint, serviceDiscoverySerpsSimilarity);
 
   app.get('/__py', checkPython);

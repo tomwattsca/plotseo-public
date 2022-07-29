@@ -17,18 +17,6 @@ export interface IGetSerpResult {
   newKeywords: string[];
 }
 
-export const d4sGET = async <T, A>(ax: AxiosInstance, path: string, data: A): Promise<T | undefined> => {
-  let response: AxiosResponse | undefined;
-
-  try {
-    response = await ax.get(`https://api.dataforseo.com${path}`, data);
-  } catch (err) {
-    console.error(err);
-  }
-
-  return response && response.data;
-};
-
 export const d4sPOST = async <TResponse, TData>(ax: AxiosInstance, path: string, data: TData): Promise<TResponse | undefined> => {
   let response: AxiosResponse | undefined;
 

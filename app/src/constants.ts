@@ -37,10 +37,6 @@ export const QUEUES: Record<IQueueType, { development: string; endpoint: string 
     endpoint: '/service/discovery-item-analysis',
     development: 'http://services:8081',
   },
-  'discovery-start': {
-    endpoint: '/service/discovery-start',
-    development: 'http://services:8081',
-  },
   'discovery-topic-map': {
     endpoint: '/service/discovery-topic-map',
     development: 'http://services:8081',
