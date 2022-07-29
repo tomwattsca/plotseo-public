@@ -52,7 +52,7 @@ export const serviceDiscoveryTopicMap = async (req: Req, res: Response) => {
     return res.status(404).json({ message: 'Report does not exists' });
   }
 
-  const items = await dbGetDiscoveryItemsForReport<IDiscoveryItem>(data.reportId);
+  const items = await dbGetDiscoveryItemsForReport<Pick<IDiscoveryItem, 'keyword'>>(data.reportId, { keyword: 1 });
   if (!items || items.length === 0) {
     console.error(`[discovery-topic-map]: No items found for report: ${data.reportId.toString()}`);
     await dbUpdateTopicMap(data.topicMapId, { status: REPORT_STATUS_ERROR });

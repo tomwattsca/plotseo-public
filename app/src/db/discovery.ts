@@ -27,27 +27,13 @@ export const dbListDiscovery = async (): Promise<IDiscoveryForList[]> => {
   return collection.find<IDiscoveryForList>({}, { projection: { _id: 1, status: 1, name: 1, date: 1 } }).toArray();
 };
 
-export const dbGetDiscovery = async <T>(id: ObjectId, projection?: { [P in keyof Required<T>]: 1 }): Promise<T | undefined> => {
+export const dbGetDiscovery = async <TObj>(id: ObjectId, projection: Record<keyof TObj, 1>): Promise<TObj | undefined> => {
   if (!db) {
     throw new Error('Database not connected');
   }
 
-  let result;
   const collection = await db.collection(COLLECTION);
-
-  if (projection) {
-    const finalProjection = { ...projection, _id: 1 };
-    result = await collection.findOne<T>(
-      {
-        _id: id,
-      },
-      { projection: finalProjection },
-    );
-  } else {
-    result = await collection.findOne<T>({
-      _id: id,
-    });
-  }
+  const result = await collection.findOne<TObj>({ _id: id }, { projection });
 
   if (!result) {
     return undefined;

@@ -4,11 +4,11 @@ import { IDiscoveryItem } from '../types/IDiscoveryItem';
 
 const COLLECTION = 'discoveryItem';
 
-export const dbGetDiscoveryItem = async <T>(
+export const dbGetDiscoveryItem = async <TObj>(
   report: ObjectId,
   keyword: string,
-  projection?: { [P in keyof Required<T>]: 1 },
-): Promise<T | undefined> => {
+  projection: Record<keyof TObj, 1>,
+): Promise<TObj | undefined> => {
   if (!db) {
     throw new Error('Database not connected');
   }
@@ -17,29 +17,20 @@ export const dbGetDiscoveryItem = async <T>(
     return undefined;
   }
 
-  let result;
   const collection = db.collection(COLLECTION);
-
-  if (projection) {
-    const finalProjection = { ...projection, _id: 1 };
-    result = await collection.findOne<T>({ report, keyword }, { projection: finalProjection });
-  } else {
-    result = await collection.findOne<T>({ report, keyword });
-  }
-
+  const result = await collection.findOne<TObj>({ report, keyword }, { projection });
   return result ? result : undefined;
 };
 
-export const dbGetDiscoveryItemsForReport = async <T>(
+export const dbGetDiscoveryItemsForReport = async <TObj>(
   report: ObjectId,
-  projection?: { [P in keyof Required<T>]: 1 },
+  projection: Record<keyof TObj, 1>,
   keywords?: string[],
-): Promise<T[] | undefined> => {
+): Promise<TObj[] | undefined> => {
   if (!db) {
     throw new Error('Database not connected');
   }
 
-  let result;
   const collection = await db.collection(COLLECTION);
 
   let filter: Filter<Partial<IDiscoveryItem>> = { report };
@@ -47,12 +38,7 @@ export const dbGetDiscoveryItemsForReport = async <T>(
     filter = { ...filter, keyword: { $in: keywords } };
   }
 
-  if (projection) {
-    const finalProjection = { ...projection, _id: 1 };
-    result = await collection.find<T & { _id: ObjectId }>(filter, { projection: finalProjection }).toArray();
-  } else {
-    result = await collection.find<T & { _id: ObjectId }>(filter).toArray();
-  }
+  const result = await collection.find<TObj>(filter, { projection }).toArray();
 
   if (!result) {
     return undefined;

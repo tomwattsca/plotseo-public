@@ -48,12 +48,7 @@ export const apiDeleteDiscoveryKeywords = async ({
 
     // Re-calculate serpSimilarity and clusters
     const serpSimilarityTaskUuid = uuid();
-    await dbAddOrUpdateDiscoveryTask(
-      new ObjectId(reportId),
-      serpSimilarityTaskUuid,
-      'discovery-serps-similarity',
-      REPORT_STATUS_QUEUED,
-    );
+    await dbAddOrUpdateDiscoveryTask(new ObjectId(reportId), serpSimilarityTaskUuid, 'discovery-serps-similarity', REPORT_STATUS_QUEUED);
     await sendToQueue<IDiscoverySerpSimilarityMessage>('discovery-serps-similarity', {
       seed: report.seed,
       reportId: reportId.toString(),

@@ -1,22 +1,6 @@
 # Keyword Tool
 
-The first open source keyword tool.
-
-## Requirements
-
-For all features to work you'll need these APIs setup on your `.env.dev` file:
-
-* DataForSEO API key (for SERP data)
-* Keywords Everywhere API key (for keyword data)
-* Open-AI API key (for GPT-3)
-
-Not used yet but will be soon:
-
-* Browserless API key (for future features on SERP Analysis)
-* Huggingface API key (for future features)
-* Google API key (for Google NLP API use)
-
-## Features
+Open source keyword tool.
 
 Includes features like:
 
@@ -31,7 +15,23 @@ Includes features like:
 * Intent grouping
 * Modifiers/Common terms, verbs and modifier ideas
 
+## Screenshot
+
 <img alt="Screenshot" src="./screenshot.png" width="800" />
+
+## Requirements
+
+For all features to work you'll need these APIs setup on your `.env.dev` file:
+
+* DataForSEO API key (for SERP data)
+* Keywords Everywhere API key (for keyword data)
+* Open-AI API key (for GPT-3)
+
+Not used yet but will be soon:
+
+* Browserless API key (for future features on SERP Analysis)
+* Huggingface API key (for future features)
+* Google API key (for Google NLP API use)
 
 ## Env file (configuration)
 

@@ -11,7 +11,6 @@ import { sendToQueue } from '../../shared/queue';
 import { IDiscoveryItemAnalysisMessage } from '../../types/IDiscoveryItemAnalysisMessage';
 
 export const apiRunDiscoveryItemAnalysis = async ({
-  ctx,
   input,
 }: {
   ctx: Context;

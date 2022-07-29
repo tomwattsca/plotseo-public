@@ -44,7 +44,7 @@ export const serviceDiscoveryKeywords = async (req: Req, res: Response) => {
     reportId: new ObjectId(data.reportId.toString() || ''),
   };
 
-  // TODO: Get keyword from any report with up to date data
+  // TODO: Get keyword from any report with up-to-date data
 
   const keywordsToUpdate: string[] = [];
   const reportKeywords = await dbGetDiscoveryItemsForReport<Pick<IDiscoveryItem, 'keyword' | 'volume' | 'year' | 'month'>>(
