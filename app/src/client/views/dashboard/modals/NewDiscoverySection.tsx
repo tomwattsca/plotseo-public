@@ -9,10 +9,9 @@ import InputWithIcon from '../../../components/InputWithIcon';
 import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import { GOOGLE_CANADA, GOOGLE_UK, GOOGLE_US, SEARCH_ENGINES } from '../../../../types/IGoogleDomain';
 import { CANADA_CODE, UNITED_KINGDOM_CODE, UNITED_STATES_CODE } from '../../../../types/ICountryType';
-import { API_URL, DEFAULT_SERP_LOCATION, DISCOVERY_REPORT_COST, MAX_CUSTOM_KEYWORDS } from '../../../../constants';
+import { API_URL, DEFAULT_SERP_LOCATION, MAX_CUSTOM_KEYWORDS } from '../../../../constants';
 import {
   SEARCH_TYPE_URL,
-  SEARCH_TYPE_EMPTY,
   SEARCH_TYPE_CUSTOM,
   SEARCH_TYPE_WILDCARD,
   IDiscoverySearchType,
@@ -181,9 +180,6 @@ const NewDiscoverySection = ({ close }: Props) => {
               if (e.target.value !== SEARCH_TYPE_CUSTOM) {
                 setCustomKeywords('');
               }
-              if (e.target.value === SEARCH_TYPE_EMPTY) {
-                setSeedKeyword('');
-              }
               setType(e.target.value as IDiscoverySearchType);
             }}
             className="focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm text-sm border-gray-300 rounded-md"
@@ -192,7 +188,6 @@ const NewDiscoverySection = ({ close }: Props) => {
             <option value={SEARCH_TYPE_URL}>Get keywords for a URL</option>
             <option value={SEARCH_TYPE_QUESTIONS}>Discover question keywords</option>
             <option value={SEARCH_TYPE_WILDCARD}>Wildcard search suggestions</option>
-            {/*<option value={SEARCH_TYPE_EMPTY}>Start with an empty report</option>*/}
           </select>
           {(type === SEARCH_TYPE_QUESTIONS || type === SEARCH_TYPE_WILDCARD) && (
             <Fragment>
@@ -298,12 +293,6 @@ const NewDiscoverySection = ({ close }: Props) => {
           {error && <div className="px-3 py-2 rounded bg-red-100 text-red-800 text-sm mt-3">{error}</div>}
           <div className="px-3 py-2 bg-sky-50 text-sky-700 rounded mt-2">
             You can set competitors and other settings inside your report.
-            {type !== SEARCH_TYPE_EMPTY && (
-              <Fragment>
-                <br />
-                <span className="font-medium">Creating the report will cost you {DISCOVERY_REPORT_COST} credits.</span>
-              </Fragment>
-            )}
           </div>
           <Button
             className="mt-2"
