@@ -1,6 +1,6 @@
 # Keyword Tool
 
-Open source keyword tool.
+Open source keyword tool, built in a few weekends to help some SEO friends.
 
 Includes features like:
 
