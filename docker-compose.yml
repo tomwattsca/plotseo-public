@@ -22,7 +22,6 @@ services:
       - "8080:8080"
       - "1234:1234"
     depends_on:
-      - redis
       - mongo
     environment:
       NODE_ENV: development
@@ -39,7 +38,6 @@ services:
       - ./app/creds.json:/home/node/creds.json
     command: npm run dev:services
     depends_on:
-      - redis
       - mongo
     environment:
       NODE_ENV: development
