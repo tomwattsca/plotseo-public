@@ -24,6 +24,7 @@ services:
     depends_on:
       - mongo
     environment:
+      PORT: 8080
       NODE_ENV: development
       DEBUG: node-server:*
   services:
@@ -40,5 +41,6 @@ services:
     depends_on:
       - mongo
     environment:
+      PORT: 8081
       NODE_ENV: development
       DEBUG: node-services:*

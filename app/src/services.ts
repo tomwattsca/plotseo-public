@@ -13,7 +13,7 @@ import { serviceDiscoveryTopicMap } from './services/serviceDiscoveryTopicMap';
 import { serviceDiscoverySerpsSimilarity } from './services/serviceDiscoverySerpsSimilarity';
 
 const app = express();
-const port = 8081;
+const port = process.env.PORT || 8081;
 
 const start = async () => {
   await connectDb();
