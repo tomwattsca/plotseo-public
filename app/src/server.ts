@@ -15,7 +15,7 @@ import { viewSimple } from './controllers/viewSimple';
 import { viewTopicMap } from './controllers/viewTopicMap';
 import { viewDiscovery } from './controllers/viewDiscovery';
 
-const port = process.env.PORT || 8080;
+const port = process.env.APP_PORT || 8080;
 const app = express();
 
 const start = async () => {
