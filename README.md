@@ -77,6 +77,22 @@ HUGGINGFACE_API_KEY="<your huggingface api key>"
 * Run (on a terminal/cli) `docker compose up -d --build` to rebuild
 * Go to the browser and open `http://localhost:8080`
 
+## Running on custom ports
+
+For this you will need to update your `docker-compose.yml` file and change the `PORT` environment variables plus
+the `ports` sections of `server` and/or `services` depending on your needs. Here is an example for server on `8083`:
+
+```yaml
+# ... server section
+    ports:
+      - "8083:8083" # change this
+      - "1234:1234"
+    depends_on:
+      - mongo
+    environment:
+      PORT: 8083 # change this
+```
+
 ## Bug reports or feature requests
 
 To report a bug or request a feature, please open an issue on [GitHub](https://github.com/PabloRosales/keyword-tool)
