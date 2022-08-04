@@ -10,15 +10,14 @@ import { IDiscoveryTerm, IDiscoveryTermChild } from '../../../types/IDiscoveryTe
 import { AtomDiscoveryControl, ControlHasFilters } from './atoms/AtomDiscoveryControl';
 import { REPORT_STATUS_COMPLETED, REPORT_STATUS_ERROR, REPORT_STATUS_PROCESSING, REPORT_STATUS_QUEUED } from '../../../types/IReportStatus';
 import { SEARCH_TYPE_CUSTOM, SEARCH_TYPE_QUESTIONS, SEARCH_TYPE_URL, SEARCH_TYPE_WILDCARD } from '../../../types/IDiscoverySearchType';
-
-interface customWindow extends Window {
-  __id: string;
-}
-declare const window: customWindow;
+import { useParams } from 'react-router-dom';
 
 const useDiscovery = () => {
   const [control, setControl] = useRecoilState(AtomDiscoveryControl);
   const hasFilters = useRecoilValue(ControlHasFilters);
+
+  const params = useParams<{ id: string }>();
+  const reportId = params.id || '';
 
   const clearFilters = () => {
     setControl((prev) => ({
@@ -42,7 +41,7 @@ const useDiscovery = () => {
     }));
   };
 
-  const doGetBase = trpc.useQuery(['discovery:base', { reportId: window.__id }], {
+  const doGetBase = trpc.useQuery(['discovery:base', { reportId }], {
     onSuccess: (data) => {
       if (data.success && data.id && data.report) {
         if (data.report.status !== REPORT_STATUS_COMPLETED && data.report.status !== REPORT_STATUS_ERROR) {
@@ -55,11 +54,11 @@ const useDiscovery = () => {
     refetchOnWindowFocus: false,
   });
 
-  const doGetItems = trpc.useQuery(['discovery:items', { reportId: window.__id }], {
+  const doGetItems = trpc.useQuery(['discovery:items', { reportId }], {
     enabled: doGetBase.data !== undefined && doGetBase.data.id !== undefined,
   });
 
-  const doGetClusters = trpc.useQuery(['discovery:clusters', { reportId: window.__id }], { refetchOnWindowFocus: false });
+  const doGetClusters = trpc.useQuery(['discovery:clusters', { reportId }], { refetchOnWindowFocus: false });
 
   const base = useMemo(() => doGetBase.data?.report, [doGetBase.data?.report]);
   const clusters = useMemo(() => doGetClusters.data?.clusters || [], [doGetClusters.data?.clusters]);
@@ -470,7 +469,7 @@ const useDiscovery = () => {
     },
   });
 
-  const doGetTasks = trpc.useQuery(['discovery:tasks', { reportId: window.__id }], {
+  const doGetTasks = trpc.useQuery(['discovery:tasks', { reportId }], {
     onSuccess: async (data) => {
       if (data.tasks) {
         if (data.tasks?.some((task) => task.status === REPORT_STATUS_PROCESSING || task.status === REPORT_STATUS_QUEUED)) {

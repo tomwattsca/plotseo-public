@@ -8,12 +8,10 @@ import { connectDb } from './shared/db';
 import { dbCreateIndexes } from './db/indexes';
 import * as trpcExpress from '@trpc/server/adapters/express';
 
+import { PUBLIC_DIR } from './constants';
 import { appRouter } from './shared/appRouter';
 import { createContext } from './shared/context';
 import { searchLocations } from './api/locations';
-import { viewSimple } from './controllers/viewSimple';
-import { viewTopicMap } from './controllers/viewTopicMap';
-import { viewDiscovery } from './controllers/viewDiscovery';
 
 const port = process.env.APP_PORT || 8080;
 const app = express();
@@ -41,11 +39,6 @@ const start = async () => {
 
   app.use('/public', express.static(path.join(__dirname, 'public')));
 
-  // VIEWS
-  app.get('/discovery/:id', viewDiscovery);
-  app.get('/', viewSimple('dashboard.html'));
-  app.get('/discovery/topic-map/:reportId', viewTopicMap);
-
   app.post('/api/location', searchLocations);
   app.use(
     '/api/__t',
@@ -54,6 +47,8 @@ const start = async () => {
       createContext,
     }),
   );
+
+  app.get('/*', (req, res) => res.sendFile(path.join(PUBLIC_DIR, 'index.html')));
 
   app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

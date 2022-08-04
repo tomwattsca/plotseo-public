@@ -1,22 +1,18 @@
 import 'antd/dist/antd.css';
 import { flatten } from 'lodash';
 import Bar from './components/Bar';
-import { trpc } from '../../utils';
-import { RecoilRoot } from 'recoil';
 import Nav from '../../components/Nav';
 import React, { useState } from 'react';
 import useDiscovery from './useDiscovery';
-import { createRoot } from 'react-dom/client';
 import Tailwind from '../../components/Tailwind';
 import ClearButton from './components/ClearButton';
 import Keywords from './sections/Keywords/Keywords';
 import SerpDataModal from './components/SerpDataModal';
 import DiscoveryTitle from './components/DiscoveryTitle';
 import DropdownSections from './components/DropdownSections';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import ShowCurrentSection from './sections/ShowCurrentSection';
 import RemoveKeywordsModal from './components/RemoveKeywordsModal';
-import { API_URL, DISCOVERY_KEYWORDS_LIMIT } from '../../../constants';
+import { DISCOVERY_KEYWORDS_LIMIT } from '../../../constants';
 import { REPORT_STATUS_ERROR, REPORT_STATUS_PROCESSING, REPORT_STATUS_QUEUED } from '../../../types/IReportStatus';
 
 const Processing = () => {
@@ -219,21 +215,4 @@ const Discovery = () => {
   );
 };
 
-const DiscoveryWrapper = () => {
-  const [queryClient] = useState(() => new QueryClient());
-  const [trpcClient] = useState(() => trpc.createClient({ url: API_URL + '/__t' }));
-  return (
-    <RecoilRoot>
-      <trpc.Provider client={trpcClient} queryClient={queryClient}>
-        <QueryClientProvider client={queryClient}>
-          <Discovery />
-        </QueryClientProvider>
-      </trpc.Provider>
-    </RecoilRoot>
-  );
-};
-
-const container = document.getElementById('root');
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const root = createRoot(container!);
-root.render(<DiscoveryWrapper />);
+export default Discovery;

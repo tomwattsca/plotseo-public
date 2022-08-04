@@ -3,12 +3,9 @@ import 'antd/dist/antd.css';
 import { trpc } from '../../utils';
 import message from 'antd/es/message';
 import Nav from '../../components/Nav';
-import PopConfirm from 'antd/es/popconfirm';
-import { createRoot } from 'react-dom/client';
-import { API_URL } from '../../../constants';
-import Button from '../../components/Button';
 import React, { useState } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import PopConfirm from 'antd/es/popconfirm';
+import Button from '../../components/Button';
 import NewDiscoverySection from './NewDiscoverySection';
 import { IDiscoveryForList } from '../../../types/IDiscoveryForList';
 import { REPORT_STATUS_COMPLETED, REPORT_STATUS_ERROR, REPORT_STATUS_PROCESSING, REPORT_STATUS_QUEUED } from '../../../types/IReportStatus';
@@ -134,19 +131,4 @@ const Item = ({ item, onDelete }: { item: IDiscoveryForList; onDelete: () => voi
   );
 };
 
-const DashboardWrapper = () => {
-  const [queryClient] = useState(() => new QueryClient());
-  const [trpcClient] = useState(() => trpc.createClient({ url: API_URL + '/__t' }));
-  return (
-    <trpc.Provider client={trpcClient} queryClient={queryClient}>
-      <QueryClientProvider client={queryClient}>
-        <Dashboard />
-      </QueryClientProvider>
-    </trpc.Provider>
-  );
-};
-
-const container = document.getElementById('root');
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const root = createRoot(container!);
-root.render(<DashboardWrapper />);
+export default Dashboard;

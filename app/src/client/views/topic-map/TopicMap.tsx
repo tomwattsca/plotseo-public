@@ -1,24 +1,17 @@
-import { RecoilRoot } from 'recoil';
 import Nav from '../../components/Nav';
-import { API_URL } from '../../../constants';
-import { createRoot } from 'react-dom/client';
-import { flatten, sortBy, sum, uniq } from 'lodash';
+import { flatten, sortBy, uniq } from 'lodash';
 import { formatNumber, trpc } from '../../utils';
 import { cleanKeyword } from '../../../shared/keyword';
 import React, { useEffect, useMemo, useState } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import { ITopicMapItem } from '../../../types/IDiscoveryTopicMap';
 import { IDiscoveryItemOutput } from '../../../api/discovery/input/inputGetDiscoveryItems';
 import type { IDiscoveryTopicMapItemOutput } from '../../../api/discovery/input/apiGetTopicMap';
 import { REPORT_STATUS_COMPLETED, REPORT_STATUS_ERROR, REPORT_STATUS_PROCESSING, REPORT_STATUS_QUEUED } from '../../../types/IReportStatus';
-
-interface customWindow extends Window {
-  __reportId: string;
-}
-declare const window: customWindow;
+import { useParams } from 'react-router-dom';
 
 const TopicMap = () => {
-  const reportId = useMemo(() => window.__reportId, []);
+  const params = useParams<{ id: string }>();
+  const reportId = params.id || '';
 
   const doGetBase = trpc.useQuery(['discovery:base', { reportId }], {
     refetchOnWindowFocus: false,
@@ -249,21 +242,4 @@ const Cluster = ({
   );
 };
 
-const TopicMapWrapper = () => {
-  const [queryClient] = useState(() => new QueryClient());
-  const [trpcClient] = useState(() => trpc.createClient({ url: API_URL + '/__t' }));
-  return (
-    <RecoilRoot>
-      <trpc.Provider client={trpcClient} queryClient={queryClient}>
-        <QueryClientProvider client={queryClient}>
-          <TopicMap />
-        </QueryClientProvider>
-      </trpc.Provider>
-    </RecoilRoot>
-  );
-};
-
-const container = document.getElementById('root');
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const root = createRoot(container!);
-root.render(<TopicMapWrapper />);
+export default TopicMap;
