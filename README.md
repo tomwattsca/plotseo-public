@@ -79,18 +79,30 @@ HUGGINGFACE_API_KEY="<your huggingface api key>"
 
 ## Running on custom ports
 
-For this you will need to update your `docker-compose.yml` file and change the `PORT` environment variables plus
-the `ports` sections of `server` and/or `services` depending on your needs. Here is an example for server on `8083`:
+For this you will need to update your `docker-compose.yml` file and change the `APP_PORT` and `SERVICES_PORT` environment variables plus
+the `ports` sections of `server` and/or `services` depending on your needs.
 
+Server service section:
 ```yaml
-# ... server section
     ports:
-      - "8083:8083" # change this
+      - "8080:8080"
       - "1234:1234"
-    depends_on:
-      - mongo
+```    
+```yaml
     environment:
-      PORT: 8083 # change this
+      APP_PORT: 8080
+      SERVICES_PORT: 8081
+```
+
+Services service section:
+```yaml
+    ports:
+      - "8081:8081"
+```
+```yaml
+    environment:
+      APP_PORT: 8080
+      SERVICES_PORT: 8081
 ```
 
 ## Bug reports or feature requests
